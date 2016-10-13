@@ -29,5 +29,6 @@ public class MainActivity extends AppCompatActivity {
             temp_sDir = NOSDCARD_DIR_TEMP;
             note_sDir = NOSDCARD_DIR_NOTE;
         }
+        
     }
 }
