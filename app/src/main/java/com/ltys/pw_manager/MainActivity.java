@@ -1,6 +1,7 @@
 package com.ltys.pw_manager;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void show_signin(){
-
+        Intent it = new Intent();
+        it.setClassName(MainActivity.this,"com.ltys.pw_manager.signin_activity");
+        startActivity(it);
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
