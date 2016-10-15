@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,19 +80,9 @@ public class MainActivity extends Activity {
 //            note_sDir = NOSDCARD_DIR_NOTE;
 //        }
 
-//        sDir = new String("./");
-//        file = new File(sDir + "pass.xml");
-//        if (!file.exists()) {
-//            try {
-//                file.createNewFile();
-//                fos = new FileOutputStream(file);
-//                osw = new OutputStreamWriter(fos, "UTF-8");
-//                osw.write("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?><root></root>");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                exit(0);
-//            }
-//        }
+        sDir = new String("./");
+        file = new File(sDir);
+
         MainActivityPermissionsDispatcher.get_permissions_funcWithCheck(MainActivity.this);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
