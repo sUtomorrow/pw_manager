@@ -15,7 +15,7 @@ public class GestureLock extends ViewGroup {
     public static final int MODE_NORMAL = 0;
     public static final int MODE_EDIT = 1;
 
-    private int mode = MODE_NORMAL;
+    public int mode = MODE_NORMAL;
 
     private int depth = 3;
 
@@ -24,7 +24,6 @@ public class GestureLock extends ViewGroup {
 
     private int[] defaultGestures = new int[]{0};
     private int[] negativeGestures;
-
     private int[] gesturesContainer;
     private int gestureCursor = 0;
 
@@ -277,11 +276,11 @@ public class GestureLock extends ViewGroup {
     public boolean onTouchEvent(MotionEvent event) {
 
         if (touchable) {
-            switch (event.getActionMasked()) {
+            switch (event.getActionMasked()){
                 case MotionEvent.ACTION_DOWN:   //按下按钮
                     for (int i = 0; i < getChildCount(); i++) {
                         View c = getChildAt(i);
-                        if (c instanceof GestureLockView) {
+                        if (c instanceof GestureLockView){
                             ((GestureLockView) c).setLockerState(GestureLockView.LockerState.LOCKER_STATE_NORMAL);
                             ((GestureLockView) c).setArrow(-1);
                         }
@@ -366,9 +365,6 @@ public class GestureLock extends ViewGroup {
                                 }
                             }
                         } else {
-                            for (int j = 0; j < defaultGestures.length; j++) {
-                                Log.i("abc",""+gesturesContainer[j]);
-                            }
                             unmatchedCount = 0;
                         }
 
@@ -387,9 +383,7 @@ public class GestureLock extends ViewGroup {
 
                     lastX = lastPathX;
                     lastY = lastPathY;
-
                     invalidate();
-
                     break;
             }
         }
