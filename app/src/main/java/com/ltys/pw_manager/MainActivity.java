@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,19 +35,20 @@ import static java.lang.System.exit;
 @RuntimePermissions
 public class MainActivity extends Activity {
     private String sDir = null;
-    private String temp_sDir = null;
-    private String note_sDir = null;
-    private do_with_xml dwx_pass = null;
-    private do_with_xml dwx_content = null;
+//    private String temp_sDir = null;
+//    private String note_sDir = null;
+    private do_with_xml dwx = null;
     public static int curse = 0;
     public static int width = 5;
     public static int lock_val = 1;
-    //    private String SDCARD_DIR = "/mnt/sdcard/.wifi_trans/.pic/";
-//    private String SDCARD_DIR_TEMP = "/mnt/sdcard/.wifi_trans/.temp/";
-//    private String SDCARD_DIR_NOTE = "/mnt/sdcard/.wifi_trans/.note/";
-//    private String NOSDCARD_DIR = "/data/data/.com.example.lenovo.wifi_trans/.pic/";
-//    private String NOSDCARD_DIR_TEMP = "/data/data/.com.example.lenovo.wifi_trans/.temp/";
-//    private String NOSDCARD_DIR_NOTE = "/data/data/.com.example.lenovo.wifi_trans/.note/";
+
+    private String SDCARD_DIR = "/mnt/sdcard/.pw_manager/";
+//    private String SDCARD_DIR_TEMP = "/mnt/sdcard/.pw_manager/.temp/";
+//    private String SDCARD_DIR_NOTE = "/mnt/sdcard/.pw_manager/.note/";
+    private String NOSDCARD_DIR = "/data/data/.com.example.lenovo.pw_manager/";
+//    private String NOSDCARD_DIR_TEMP = "/data/data/.com.ltys.pw_manager/.temp/";
+//    private String NOSDCARD_DIR_NOTE = "/data/data/.com.ltys.pw_manager/.note/";
+
     private final String md_text = "liutengying";
     private Button sign_in_button = null;
     private File file = null;
@@ -69,20 +72,23 @@ public class MainActivity extends Activity {
         }
         input_container = negativeGestures.clone();
         sec_input_container = negativeGestures.clone();
-//        String status = Environment.getExternalStorageState();
-//        if (status.equals(Environment.MEDIA_MOUNTED)) {
-//            sDir = SDCARD_DIR;
+        String status = Environment.getExternalStorageState();
+        if (status.equals(Environment.MEDIA_MOUNTED)) {
+            sDir = SDCARD_DIR;
 //            temp_sDir = SDCARD_DIR_TEMP;
 //            note_sDir = SDCARD_DIR_NOTE;
-//        } else {
-//            sDir = NOSDCARD_DIR;
+        } else {
+            sDir = NOSDCARD_DIR;
 //            temp_sDir = NOSDCARD_DIR_TEMP;
 //            note_sDir = NOSDCARD_DIR_NOTE;
-//        }
+        }
 
-        sDir = new String("./");
+//        sDir = new String("./");
         file = new File(sDir);
-
+        if(!file.exists()){
+            file.mkdirs();
+        }
+        dwx = new do_with_xml(sDir+"pw_manager.xml");
         MainActivityPermissionsDispatcher.get_permissions_funcWithCheck(MainActivity.this);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -118,22 +124,15 @@ public class MainActivity extends Activity {
 
     private List<Map<String, Object>> getData() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("name", "G1");
-        map.put("icon", R.mipmap.ic_launcher);
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("name", "G2");
-        map.put("icon", R.mipmap.ic_launcher);
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("name", "G3");
-        map.put("icon", R.mipmap.ic_launcher);
-        list.add(map);
-
+        ArrayList<String> names = dwx.all_node();
+        String img = null;
+        for(String name:names){
+//            img = dwx.get_por_by_name(name,"img");
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("name", name);
+            map.put("icon", R.mipmap.ic_launcher);
+            list.add(map);
+        }
         return list;
     }
 

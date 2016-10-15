@@ -1,8 +1,15 @@
 package com.ltys.pw_manager;
 
+import android.support.annotation.NonNull;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
@@ -44,6 +51,20 @@ public class do_with_xml{
         }
 	}
 
+	/**
+	 * all_node 返回所有节点
+	 * @return 返回一个包含所有节点名的ArrayList
+     */
+	public ArrayList all_node(){
+		node = (Element)selectSingleNode("/root",root);
+		NodeList nodes = null;
+		ArrayList<String> all_name = new ArrayList<String>();
+		nodes = node.getElementsByTagName("item");
+		for(int i = 0;i<nodes.getLength();i++){
+			all_name.add(nodes.item(i).getTextContent());
+		}
+		return all_name;
+	}
 	/**
 	 * add_node 添加节点
 	 * @param name 节点的名字属性，唯一
