@@ -52,18 +52,19 @@ public class do_with_xml{
 	}
 
 	/**
-	 * all_node 返回所有节点
+	 * all_name 返回所有节点
 	 * @return 返回一个包含所有节点名的ArrayList
      */
-	public ArrayList all_node(){
+	public ArrayList all_name(){
 		node = (Element)selectSingleNode("/root",root);
 		NodeList nodes = null;
-		ArrayList<String> all_name = new ArrayList<String>();
+		ArrayList<String> names = new ArrayList<String>();
 		nodes = node.getElementsByTagName("item");
 		for(int i = 0;i<nodes.getLength();i++){
-			all_name.add(nodes.item(i).getTextContent());
+			node_find = (Element)nodes.item(i);
+			names.add(node_find.getAttribute("name"));
 		}
-		return all_name;
+		return names;
 	}
 	/**
 	 * add_node 添加节点

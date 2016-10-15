@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
 
     private List<Map<String, Object>> getData() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        ArrayList<String> names = dwx.all_node();
+        ArrayList<String> names = dwx.all_name();
         String img = null;
         for(String name:names){
 //            img = dwx.get_por_by_name(name,"img");
