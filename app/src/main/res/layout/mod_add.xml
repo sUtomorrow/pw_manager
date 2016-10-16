@@ -5,7 +5,7 @@
     android:orientation="vertical">
     <ImageView
         android:src="@mipmap/ic_launcher"
-        android:id="@+id/show_img"
+        android:id="@+id/ma_img"
         android:layout_width="wrap_content"
         android:layout_height="40dp" />
     <LinearLayout
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp">
         <TextView
-            android:id="@+id/show1"
+            android:id="@+id/ma1"
             android:text="名称："
             android:singleLine="true"
             android:layout_width="match_parent"
@@ -22,13 +22,14 @@
             android:textSize="20dp"
             android:gravity="center_vertical"
             />
-        <TextView
-            android:id="@+id/show_name"
+        <EditText
+            android:id="@+id/ma_name"
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_weight="2"
             android:textSize="20dp"
+            android:hint="输入名称"
             android:gravity="center_vertical"
             />
     </LinearLayout>
@@ -37,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp">
         <TextView
-            android:id="@+id/show2"
+            android:id="@+id/ma2"
             android:text="账号："
             android:singleLine="true"
             android:layout_width="match_parent"
@@ -47,9 +48,9 @@
             android:gravity="center_vertical"
 
             />
-        <TextView
-            android:hint="无"
-            android:id="@+id/show_account"
+        <EditText
+            android:hint="输入账号"
+            android:id="@+id/ma_account"
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -63,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp">
         <TextView
-            android:id="@+id/show3"
+            android:id="@+id/ma3"
             android:text="密码："
             android:singleLine="true"
             android:layout_width="match_parent"
@@ -72,9 +73,9 @@
             android:textSize="20dp"
             android:gravity="center_vertical"
             />
-        <TextView
-            android:hint="无"
-            android:id="@+id/show_passwd"
+        <EditText
+            android:hint="输入密码"
+            android:id="@+id/ma_passwd"
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -83,12 +84,13 @@
             android:gravity="center_vertical"
             />
     </LinearLayout>
-    <TextView
-        android:hint="无"
+    <EditText
+        android:hint="输入备注"
         android:textSize="20dp"
-        android:id="@+id/show_note"
-        android:gravity="top"
+        android:id="@+id/ma_note"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="top"
         />
 </LinearLayout>
+

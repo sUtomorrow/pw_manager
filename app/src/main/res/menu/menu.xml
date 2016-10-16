@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/edit"
-        android:title="edit"
-        android:icon="@mipmap/ic_launcher"
-        />
     <item
         android:title="add"
         android:id="@+id/add"
+        android:icon="@mipmap/ic_launcher"
+        />
+    <item
+        android:title="passwd"
+        android:id="@+id/set_passwd"
         android:icon="@mipmap/ic_launcher"
         />
     <item

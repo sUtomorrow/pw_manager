@@ -1,7 +1,6 @@
 package com.ltys.pw_manager;
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +9,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,11 +22,11 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,17 +36,15 @@ import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
-import static android.R.id.list;
 import static java.lang.System.exit;
 
 @RuntimePermissions
 public class MainActivity extends Activity {
-    private String sDir = null;
+    public static String sDir = null;
 //    private String temp_sDir = null;
 //    private String note_sDir = null;
-    private static do_with_xml dwx = null;
-    public static int curse = 0;
-    public static int width = 5;
+    public static do_with_xml dwx = null;
+
     public static int lock_val = 1;
 
     private String SDCARD_DIR = "/mnt/sdcard/.pw_manager/";
@@ -62,10 +60,7 @@ public class MainActivity extends Activity {
     private FileOutputStream fos = null;
     private OutputStreamWriter osw = null;
     private SimpleAdapter adapter = null;
-    public static int[] container = new int[width*width];
-    public static int[] input_container = new int[width*width];
-    public static int[] sec_input_container = new int[width*width];
-    public static int[] negativeGestures = new int[width*width];
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -75,11 +70,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for(int i = 0; i < negativeGestures.length; i++) {
-            negativeGestures[i] = -1;
-        }
-        input_container = negativeGestures.clone();
-        sec_input_container = negativeGestures.clone();
+
+        MainActivityPermissionsDispatcher.get_permissions_funcWithCheck(MainActivity.this);
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    @NeedsPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET})
+    void get_permissions_func(){
         String status = Environment.getExternalStorageState();
         if (status.equals(Environment.MEDIA_MOUNTED)) {
             sDir = SDCARD_DIR;
@@ -97,36 +97,29 @@ public class MainActivity extends Activity {
             file.mkdirs();
         }
         dwx = new do_with_xml(sDir+"pw_manager.xml");
-        MainActivityPermissionsDispatcher.get_permissions_funcWithCheck(MainActivity.this);
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    @NeedsPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET})
-    void get_permissions_func(){
         if(lock_val == 1){
-            show_lock();
+            show_lock(0);
         }
         else{
             show_main();
         }
     }
 
-    private void show_lock(){
+
+
+    private void show_lock(int mode){
         Intent it = new Intent();
         it.setClassName(MainActivity.this,"com.ltys.pw_manager.signin_activity");
+        it.putExtra("mode",mode);
+        it.putExtra("path",sDir);
         startActivity(it);
-        finish();
+        if(mode==0)
+            finish();
     }
 
-    private void show_main(){
-        setContentView(R.layout.activity_main);
+    public void change(){
         ListView liview = (ListView) findViewById(R.id.listview);
-        adapter = new SimpleAdapter(this,getData(),R.layout.item,
-                new String[]{"name","icon"},
-                new int[]{R.id.name,R.id.icon});
+        adapter = new SimpleAdapter(getApplicationContext(),getData(),R.layout.item, new String[]{"name","icon"}, new int[]{R.id.name,R.id.icon});
         liview.setAdapter(adapter);
         liview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -150,8 +143,12 @@ public class MainActivity extends Activity {
                 it.putExtra("img",img==null?"":img);
                 startActivity(it);
             }
-
         });
+    }
+
+    private void show_main(){
+        setContentView(R.layout.activity_main);
+        change();
     }
 
     @Override
@@ -160,8 +157,28 @@ public class MainActivity extends Activity {
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add:
+                Intent it = new Intent();
+                it.setClassName(getApplicationContext(),"com.ltys.pw_manager.add_item");
+                startActivity(it);
+                break;
+            case R.id.exit:
+                exit(0);
+                break;
+            case R.id.set_passwd:
+                show_lock(1);
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
 
-    private List<Map<String, Object>> getData() {
+
+    private static List<Map<String, Object>> getData() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         ArrayList<String> names = dwx.all_name();
         String img = null;
@@ -205,7 +222,8 @@ public class MainActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-
+        if(lock_val==0)
+            change();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();

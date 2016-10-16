@@ -21,6 +21,12 @@
         <activity android:name="com.ltys.pw_manager.show_info">
 
         </activity>
+        <activity android:name="com.ltys.pw_manager.add_item">
+
+        </activity>
+        <activity android:name="com.ltys.pw_manager.mod_item">
+
+        </activity>
         <activity android:name="com.ltys.pw_manager.signin_activity">
 
         </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for

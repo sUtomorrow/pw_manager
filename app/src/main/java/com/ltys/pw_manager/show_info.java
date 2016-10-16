@@ -2,10 +2,12 @@ package com.ltys.pw_manager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Administrator on 2016/10/16.
@@ -39,5 +41,40 @@ public class show_info extends Activity {
         if(show_note!=null)
             show_note.setText(note);
 //  show_icon.setImageBitmap();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.show_info_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit:
+                Toast.makeText(getApplicationContext(), "edit", Toast.LENGTH_SHORT).show();
+                Intent it = new Intent();
+                it.setClassName(getApplicationContext(),"com.ltys.pw_manager.mod_item");
+                it.putExtra("name",name);
+                it.putExtra("account",account==null?"":account);
+                it.putExtra("passwd",passwd==null?"":passwd);
+                it.putExtra("note",note==null?"":note);
+                it.putExtra("img",img==null?"":img);
+                startActivity(it);
+                finish();
+                break;
+            case R.id.del:
+                int result = MainActivity.dwx.del_node_by_name(name);
+                if(result == 0)
+                    Toast.makeText(getApplicationContext(), "deleted", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getApplicationContext(), "delete failed", Toast.LENGTH_SHORT).show();
+                finish();
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 }
