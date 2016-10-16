@@ -1,11 +1,17 @@
 package com.ltys.pw_manager;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -30,6 +36,7 @@ import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
+import static android.R.id.list;
 import static java.lang.System.exit;
 
 @RuntimePermissions
@@ -37,7 +44,7 @@ public class MainActivity extends Activity {
     private String sDir = null;
 //    private String temp_sDir = null;
 //    private String note_sDir = null;
-    private do_with_xml dwx = null;
+    private static do_with_xml dwx = null;
     public static int curse = 0;
     public static int width = 5;
     public static int lock_val = 1;
@@ -54,6 +61,7 @@ public class MainActivity extends Activity {
     private File file = null;
     private FileOutputStream fos = null;
     private OutputStreamWriter osw = null;
+    private SimpleAdapter adapter = null;
     public static int[] container = new int[width*width];
     public static int[] input_container = new int[width*width];
     public static int[] sec_input_container = new int[width*width];
@@ -116,10 +124,41 @@ public class MainActivity extends Activity {
     private void show_main(){
         setContentView(R.layout.activity_main);
         ListView liview = (ListView) findViewById(R.id.listview);
-        SimpleAdapter adapter = new SimpleAdapter(this,getData(),R.layout.item,
+        adapter = new SimpleAdapter(this,getData(),R.layout.item,
                 new String[]{"name","icon"},
                 new int[]{R.id.name,R.id.icon});
         liview.setAdapter(adapter);
+        liview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> arg0,View arg1,int arg2,long arg3) {
+                // TODO Auto-generated method stub
+                String account,passwd,note,img;
+                ListView liview = (ListView) arg0;
+                HashMap<String, Object> map = (HashMap<String,Object>) liview.getItemAtPosition(arg2);
+                String name = (String)map.get("name");
+                Log.i("click",name);
+                account = dwx.get_por_by_name(name,"account");
+                passwd = dwx.get_por_by_name(name,"passwd");
+                note = dwx.get_por_by_name(name,"note");
+                img = dwx.get_por_by_name(name,"img");
+                Intent it = new Intent();
+                it.setClassName(MainActivity.this,"com.ltys.pw_manager.show_info");
+                it.putExtra("name",name);
+                it.putExtra("account",account==null?"":account);
+                it.putExtra("passwd",passwd==null?"":passwd);
+                it.putExtra("note",note==null?"":note);
+                it.putExtra("img",img==null?"":img);
+                startActivity(it);
+            }
+
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private List<Map<String, Object>> getData() {
@@ -127,7 +166,7 @@ public class MainActivity extends Activity {
         ArrayList<String> names = dwx.all_name();
         String img = null;
         for(String name:names){
-//            img = dwx.get_por_by_name(name,"img");
+            img = dwx.get_por_by_name(name,"img");
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("name", name);
             map.put("icon", R.mipmap.ic_launcher);
