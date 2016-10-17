@@ -1,14 +1,11 @@
 package com.ltys.pw_manager;
 
-import android.util.Log;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,19 +23,20 @@ public class ToolFunction {
      *@return String 返回加密字符串
      */
     public static String decrypt(String ssoToken) {
-        try{
-            byte[] _ssoToken = ssoToken.getBytes();
-            for (int i = 0; i < _ssoToken.length; i++) {
-                int asc = _ssoToken[i];
-                _ssoToken[i] = (byte) (asc - 27);
-            }
-            String name = new String(_ssoToken);
-            return name;
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+//        try{
+//            byte[] _ssoToken = ssoToken.getBytes();
+//            for (int i = 0; i < _ssoToken.length; i++) {
+//                int asc = _ssoToken[i];
+//                _ssoToken[i] = (byte) (asc ^ 27);
+//            }
+//            String name = new String(_ssoToken);
+//            return name;
+//        }catch(Exception e)
+//        {
+//            e.printStackTrace();
+//            return null;
+//        }
+        return new String(Base64.decode(ssoToken.getBytes()));
     }
 
     /**
@@ -47,20 +45,21 @@ public class ToolFunction {
      *@return String 返回加密字符串
      */
     public static String encrypt(String ssoToken){
-        try
-        {
-            byte[] _ssoToken = ssoToken.getBytes();
-            for (int i = 0; i < _ssoToken.length; i++) {
-                int asc = _ssoToken[i];
-                _ssoToken[i] = (byte) (asc + 27);
-            }
-            String name = new String(_ssoToken);
-            return name;
-        }catch(Exception e)
-        {
-            e.printStackTrace() ;
-            return null;
-        }
+//        try
+//        {
+//            byte[] _ssoToken = ssoToken.getBytes();
+//            for (int i = 0; i < _ssoToken.length; i++) {
+//                int asc = _ssoToken[i];
+//                _ssoToken[i] = (byte) (asc ^ 27);
+//            }
+//            String name = new String(_ssoToken);
+//            return name;
+//        }catch(Exception e)
+//        {
+//            e.printStackTrace();
+//            return null;
+//        }
+        return new String(Base64.encode(ssoToken.getBytes()));
     }
 
     public static InputStream getStringIStream(String sInputString){

@@ -120,7 +120,7 @@ public class GestureLock extends ViewGroup {
 
     private void updateParametersForAdapter(){
         this.depth = mAdapter.getDepth();
-        negativeGestures = new int[depth * depth];
+        negativeGestures = new int[depth * depth+1];
         for(int i = 0; i < negativeGestures.length; i++) negativeGestures[i] = -1;
         gesturesContainer = negativeGestures.clone();
         defaultGestures = mAdapter.getCorrectGestures();

@@ -4,20 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
-import android.widget.Toolbar;
-
 import com.sevenheaven.gesturelock.GestureLock;
 import com.sevenheaven.gesturelock.GestureLockView;
-
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 import static java.lang.System.exit;
 
@@ -28,10 +18,10 @@ import static java.lang.System.exit;
 public class signin_activity extends Activity {
     public static int width = 5;
     private int lock = 1;
-    public static int[] container = new int[width*width];
-    public static int[] input_container = new int[width*width];
-    public static int[] sec_input_container = new int[width*width];
-    public static int[] negativeGestures = new int[width*width];
+    public static int[] container = new int[width*width+1];
+    public static int[] input_container = new int[width*width+1];
+    public static int[] sec_input_container = new int[width*width+1];
+    public static int[] negativeGestures = new int[width*width+1];
     private GestureLock gestureView = null;
     public int curse = 0;
     private int mode = 0;

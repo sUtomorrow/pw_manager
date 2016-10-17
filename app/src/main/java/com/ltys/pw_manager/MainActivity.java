@@ -16,16 +16,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
-
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +53,7 @@ public class MainActivity extends Activity {
     private final String md_text = "liutengying";
     private Button sign_in_button = null;
     private File file = null;
+    private File pass_file = null;
     private FileOutputStream fos = null;
     private OutputStreamWriter osw = null;
     private SimpleAdapter adapter = null;
@@ -70,6 +67,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         MainActivityPermissionsDispatcher.get_permissions_funcWithCheck(MainActivity.this);
 
@@ -90,11 +88,18 @@ public class MainActivity extends Activity {
 //            temp_sDir = NOSDCARD_DIR_TEMP;
 //            note_sDir = NOSDCARD_DIR_NOTE;
         }
-
 //        sDir = new String("./");
         file = new File(sDir);
         if(!file.exists()){
             file.mkdirs();
+        }
+        pass_file = new File(sDir+".src/ltys.txt");
+        if(!pass_file.exists()){
+            file = new File(sDir+"pw_manager.xml");
+            if(file.exists()){
+                Toast.makeText(getApplicationContext(),"密码文件异常丢失,恢复初始密码,并删除数据",Toast.LENGTH_SHORT);
+                file.delete();
+            }
         }
         dwx = new do_with_xml(sDir+"pw_manager.xml");
         if(lock_val == 1){
@@ -222,6 +227,8 @@ public class MainActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
+        Log.i("pass",ToolFunction.encrypt("华中科技大学hub"));
+        Log.i("pass",ToolFunction.decrypt(ToolFunction.encrypt("华中科技大学hub")));
         if(lock_val==0)
             change();
         // ATTENTION: This was auto-generated to implement the App Indexing API.

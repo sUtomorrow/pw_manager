@@ -1,16 +1,8 @@
 package com.ltys.pw_manager;
-
-import android.support.annotation.NonNull;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
@@ -62,7 +54,7 @@ public class do_with_xml{
 		nodes = node.getElementsByTagName("item");
 		for(int i = 0;i<nodes.getLength();i++){
 			node_find = (Element)nodes.item(i);
-			names.add(node_find.getAttribute("name"));
+			names.add(ToolFunction.decrypt(node_find.getAttribute("name")));
 		}
 		return names;
 	}
@@ -81,15 +73,15 @@ public class do_with_xml{
 		}
 		try{
             node = xmldoc.createElement("item");
-            node.setAttribute("name",name);
+            node.setAttribute("name",ToolFunction.encrypt(name));
             node_note = xmldoc.createElement("note");
-            node_note.setTextContent(note);
+            node_note.setTextContent(ToolFunction.encrypt(note));
 			node_account = xmldoc.createElement("account");
-			node_account.setTextContent(account);
+			node_account.setTextContent(ToolFunction.encrypt(account));
 			node_passwd = xmldoc.createElement("passwd");
-			node_passwd.setTextContent(passwd);
+			node_passwd.setTextContent(ToolFunction.encrypt(passwd));
 			node_img = xmldoc.createElement("img");
-			node_img.setTextContent(img);
+			node_img.setTextContent(ToolFunction.encrypt(img));
 			node.appendChild(node_img);
             node.appendChild(node_account);
 			node.appendChild(node_passwd);
@@ -109,7 +101,7 @@ public class do_with_xml{
 	 */
 	public int del_node_by_name(String name){
 		if(exist(name)){
-			del_node = (Element)selectSingleNode("/root/item[@name='"+name+"']",root);
+			del_node = (Element)selectSingleNode("/root/item[@name='"+ToolFunction.encrypt(name)+"']",root);
 			del_node.getParentNode().removeChild(del_node);
 			save();
 		}
@@ -141,7 +133,7 @@ public class do_with_xml{
 	 * @param  source  要查找节点的父节点
 	 * @return 返回第一个符合条件的Node类型的节点，可直接转换成Element类型使用
 	 */
-	public Node selectSingleNode(String express, Object source) {// 查找节点，并返回第一个符合条件节点
+	public Node selectSingleNode(String express,Object source){// 查找节点，并返回第一个符合条件节点
 		Node result = null;
 		XPathFactory xpathFactory = XPathFactory.newInstance();
 		XPath xpath = xpathFactory.newXPath();
@@ -180,7 +172,7 @@ public class do_with_xml{
 	 * @return      存在返回true，否则返回false
 	 */
 	public Boolean exist(String name){
-		if(selectSingleNode("/root/item[@name='"+name+"']",root)!=null){
+		if(selectSingleNode("/root/item[@name='"+ToolFunction.encrypt(name)+"']",root)!=null){
 			return true;
 		}
 		else{
@@ -196,13 +188,13 @@ public class do_with_xml{
 	 */
 	public String get_por_by_name(String name,String property){
 		if(exist(name)){
-			node = (Element)selectSingleNode("/root/item[@name='"+name+"']",root);
+			node = (Element)selectSingleNode("/root/item[@name='"+ToolFunction.encrypt(name)+"']",root);
 			node_find = (Element)node.getElementsByTagName(property).item(0);
 			if(node_find==null){
 				return null;
 			}
 			else{
-				return node_find.getTextContent();
+				return ToolFunction.decrypt(node_find.getTextContent());
 			}
 		}
 		else{

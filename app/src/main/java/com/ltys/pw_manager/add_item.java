@@ -37,14 +37,14 @@ public class add_item extends Activity {
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
+        switch (item.getItemId()){
             case R.id.save:
                 if(!(new_name=ma_name.getText().toString()).equals("")) {
                     new_account = ma_account.getText().toString();
                     new_passwd = ma_passwd.getText().toString();
                     new_note = ma_note.getText().toString();
                     new_img = "";
-                    int result = MainActivity.dwx.add_node(new_name,new_note,new_img,new_account,new_passwd);
+                    int result = MainActivity.dwx.add_node(new_name,new_note,new_account,new_passwd,new_img);
                     if(result == 0){
                         Toast.makeText(getApplicationContext(), "save success", Toast.LENGTH_SHORT).show();
                     }
