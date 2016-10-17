@@ -31,13 +31,24 @@ public class do_with_xml{
 				file.createNewFile();
 				FileOutputStream fos = new FileOutputStream(file);
 				OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
-				osw.write("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?><root></root>");
+				osw.write("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?><root version=\"1.0\"></root>");
 				osw.flush();
 				osw.close();
 				fos.close();
 			}
 			this.xmldoc = db.parse(file);
 	    	this.root = xmldoc.getDocumentElement();
+			node = (Element)selectSingleNode("/root",root);
+			if(!node.getAttribute("version").equals("1.0")){
+				file.delete();
+				file.createNewFile();
+				FileOutputStream fos = new FileOutputStream(file);
+				OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+				osw.write("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?><root version=\"1.0\"></root>");
+				osw.flush();
+				osw.close();
+				fos.close();
+			}
 	    }catch (Exception e){
             e.printStackTrace();
         }
